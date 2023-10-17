@@ -23,9 +23,7 @@ def parse_config(config_paths):
 
 config = parse_config(["credentials.ini", "default.ini"])
 sPort = config["SERVER"]["PORT"]
-print(sPort)
 dBug = config["SERVER"]["DEBUG"]
-print(dBug)
 
 app = Flask(__name__)
 
