@@ -27,7 +27,6 @@ print(sPort)
 dBug = config["SERVER"]["DEBUG"]
 print(dBug)
 
-
 app = Flask(__name__)
 
 @app.route("/")
@@ -37,24 +36,20 @@ def hello():
 
 @app.route("/<string:pName>")
 def pathname(pName):
-        #loop through to look for forbidden characters
-        illegal = 0
-        for i in range(len(pName)):  # for loop to go through each character
-            if pName[i] == '~':
-                illegal += 1
-            if pName[i] == '.' and (i < len(pName) and pName[i+1] == '.'): # check for '..'
-                illegal += 1
-                break
-            #if illegal transmit error code 403
-            if illegal:
-                abort(403)
-            else:
-                #If none found, see if the address entered has a corresponding file
-                path = "./pages" + pName
-                if os.path.exists(path):
-                    return send_from_directory('pages/', pName), 200
-                else:
-                    abort(404)
+    #loop through to look for forbidden characters
+    illegal = 0
+    for i in range(len(pName)):  # for loop to go through each character
+        if pName[i] == '~':
+            abort(403)
+        if pName[i] == '.' and (i < len(pName) and pName[i+1] == '.'): # check for '..'
+            abort(403)
+        #if illegal transmit error code 403
+        #If none found, see if the address entered has a corresponding file
+        path = "./pages/" + pName
+        if os.path.exists(path):
+            return send_from_directory('pages/', pName), 200
+        else:
+            abort(404)
 
 @app.errorhandler(403)
 def forbidden(e):
